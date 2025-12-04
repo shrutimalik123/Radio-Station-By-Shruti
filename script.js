@@ -21,17 +21,9 @@ const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 function onYouTubeIframeAPIReady() {
-    // Initialize player with a default video but paused
+    console.log("API Ready. Binding to iframe...");
+    // Bind to the EXISTING iframe
     player = new YT.Player('radio-player', {
-        height: '200',
-        width: '200',
-        videoId: themes['Chill'], // Default video to load
-        playerVars: {
-            'playsinline': 1,
-            'controls': 0,
-            'autoplay': 0, // Ensure no autoplay
-            'origin': window.location.origin // Helps with some CORS issues
-        },
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
@@ -42,7 +34,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     console.log("Player Ready");
-    player = event.target; // Ensure we have the correct instance
+    player = event.target; // Capture instance
     updateStatus("Player ready. Select a vibe.");
 }
 
@@ -96,7 +88,9 @@ function loadStream(themeKey) {
         if (!player) {
             updateStatus("Player not initialized. Refresh page.");
         } else {
-            updateStatus("Player API missing. Refresh page.");
+            // If we are here, it means player exists but API is missing.
+            // This happens if the iframe binding failed.
+            updateStatus("Player API missing. Try refreshing.");
         }
     }
 }

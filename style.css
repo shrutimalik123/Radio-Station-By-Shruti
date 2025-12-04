@@ -101,20 +101,20 @@ h1 {
 
 .iframe-container {
     /* 
-       Make it technically "visible" and large enough (200x200) 
-       so browsers/YouTube allow playback, but hide it behind the UI
-       or make it nearly transparent.
+       Keep it ON SCREEN and RENDERED to ensure API initializes.
+       We use opacity to hide it visually.
+       Fixed position top-left ensures it doesn't mess up layout.
     */
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 0;
+    left: 0;
     width: 200px;
     height: 200px;
     opacity: 0.01;
-    /* Not 0, so it renders */
+    /* Invisible but rendered */
     pointer-events: none;
-    z-index: 1;
-    /* Positive z-index to ensure it's "on top" for browser logic, but opacity makes it invisible */
+    z-index: -10;
+    /* Behind everything */
 }
 
 /* Override visibility for the iframe itself */
