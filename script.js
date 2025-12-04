@@ -29,27 +29,49 @@ function onYouTubeIframeAPIReady() {
         playerVars: {
             'playsinline': 1,
             'controls': 0,
-            'autoplay': 0 // Ensure no autoplay
+            'autoplay': 0, // Ensure no autoplay
+            'origin': window.location.origin // Helps with some CORS issues
         },
         events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
         }
     });
 }
 
 function onPlayerReady(event) {
     console.log("Player Ready");
-    // Player is ready. We don't play anything yet.
+    updateStatus("Player ready. Select a vibe.");
 }
 
 function onPlayerStateChange(event) {
     const visualizer = document.querySelector('.visualizer-mock');
     if (event.data == YT.PlayerState.PLAYING) {
         visualizer.style.opacity = '1';
-    } else {
+        updateStatus("Playing...");
+    } else if (event.data == YT.PlayerState.BUFFERING) {
+        updateStatus("Buffering...");
+    } else if (event.data == YT.PlayerState.PAUSED) {
         visualizer.style.opacity = '0.5';
+        updateStatus("Paused");
     }
+}
+
+function onPlayerError(event) {
+    console.error("Player Error:", event.data);
+    let errorMsg = "Error occurred.";
+    if (event.data === 101 || event.data === 150) {
+        errorMsg = "Stream not embeddable. Try another.";
+    } else if (event.data === 2) {
+        errorMsg = "Invalid video ID.";
+    }
+    updateStatus(errorMsg);
+}
+
+function updateStatus(msg) {
+    const el = document.getElementById('player-status');
+    if (el) el.textContent = msg;
 }
 
 function loadStream(themeKey) {
@@ -57,12 +79,15 @@ function loadStream(themeKey) {
 
     activeTheme = themeKey;
     updateActiveButton();
+    updateStatus("Loading " + themeKey + "...");
 
     if (player && player.loadVideoById) {
         player.loadVideoById(themes[themeKey]);
-        // loadVideoById automatically plays the video
+        player.unMute(); // Force unmute
+        player.setVolume(100); // Force max volume
     } else {
         console.warn("Player not ready yet");
+        updateStatus("Player not ready. Wait a moment.");
     }
 }
 
