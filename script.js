@@ -1,6 +1,6 @@
 const themes = {
     'HindiRomantic': 'dnkPe3ocmPU',
-    'Chill': '1Waq8ohWbV4',
+    'Chill': 'jfKfPfyJRdk', // Changed to Lofi Girl (verified)
     '80s': 'VYvCiYJj1VA',
     'Classical': 'p12MGlv4o2s',
     'Workout': 'fCNv0Yxe-ZU',
@@ -55,13 +55,13 @@ function onPlayerError(event) {
     console.error("Player Error:", event.data);
     let errorMsg = "Error: " + event.data;
     if (event.data === 101 || event.data === 150) {
-        errorMsg = "Error " + event.data + ": Not embeddable.";
+        errorMsg = "Error " + event.data + ": Not embeddable. Try another.";
     } else if (event.data === 2) {
         errorMsg = "Error " + event.data + ": Invalid ID.";
     } else if (event.data === 5) {
-        errorMsg = "Error " + event.data + ": HTML5 Error (check connection).";
-    } else if (event.data === 100) {
-        errorMsg = "Error " + event.data + ": Video not found.";
+        errorMsg = "Error " + event.data + ": HTML5 Error.";
+    } else if (event.data === 153) {
+        errorMsg = "Error " + event.data + ": Player hidden/obscured.";
     }
     updateStatus(errorMsg);
 }
@@ -92,8 +92,6 @@ function loadStream(themeKey) {
         if (!player) {
             updateStatus("Player not initialized. Refresh page.");
         } else {
-            // If we are here, it means player exists but API is missing.
-            // This happens if the iframe binding failed.
             updateStatus("Player API missing. Try refreshing.");
         }
     }
