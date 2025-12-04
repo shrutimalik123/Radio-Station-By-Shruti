@@ -53,11 +53,15 @@ function onPlayerStateChange(event) {
 
 function onPlayerError(event) {
     console.error("Player Error:", event.data);
-    let errorMsg = "Error occurred.";
+    let errorMsg = "Error: " + event.data;
     if (event.data === 101 || event.data === 150) {
-        errorMsg = "Stream not embeddable. Try another.";
+        errorMsg = "Error " + event.data + ": Not embeddable.";
     } else if (event.data === 2) {
-        errorMsg = "Invalid video ID.";
+        errorMsg = "Error " + event.data + ": Invalid ID.";
+    } else if (event.data === 5) {
+        errorMsg = "Error " + event.data + ": HTML5 Error (check connection).";
+    } else if (event.data === 100) {
+        errorMsg = "Error " + event.data + ": Video not found.";
     }
     updateStatus(errorMsg);
 }
