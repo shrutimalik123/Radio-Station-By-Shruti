@@ -1,0 +1,237 @@
+:root {
+    --primary-glass: rgba(255, 255, 255, 0.1);
+    --secondary-glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent-color: #d946ef;
+    /* Pink/Purple accent */
+    --accent-glow: rgba(217, 70, 239, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #0f0f13;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Dynamic Background */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.4), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(219, 39, 119, 0.2), transparent 25%);
+    filter: blur(60px);
+    animation: bgPulse 10s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Glass Container */
+.glass-container {
+    background: var(--primary-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Player Section */
+.player-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.iframe-container {
+    /* 
+       Move off-screen to hide from user but keep "visible" for browser
+       to allow audio playback.
+    */
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 200px;
+    height: 200px;
+    visibility: hidden;
+}
+
+/* Override visibility for the iframe itself if needed */
+#radio-player {
+    width: 200px;
+    height: 200px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
+/* Enhanced Visualizer */
+.visualizer-mock {
+    display: flex;
+    gap: 6px;
+    height: 60px;
+    align-items: flex-end;
+    opacity: 0.9;
+}
+
+.bar {
+    width: 8px;
+    background: var(--accent-color);
+    border-radius: 4px;
+    animation: equalize 1s infinite ease-in-out alternate;
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.bar:nth-child(odd) {
+    animation-duration: 0.8s;
+}
+
+.bar:nth-child(2n) {
+    animation-duration: 1.1s;
+}
+
+.bar:nth-child(3n) {
+    animation-duration: 1.3s;
+}
+
+.bar:nth-child(4n) {
+    animation-duration: 0.9s;
+}
+
+.bar:nth-child(5n) {
+    animation-duration: 1.2s;
+}
+
+@keyframes equalize {
+    0% {
+        height: 10%;
+        opacity: 0.5;
+    }
+
+    100% {
+        height: 100%;
+        opacity: 1;
+        box-shadow: 0 0 25px var(--accent-glow);
+    }
+}
+
+/* Controls Section */
+.controls {
+    text-align: center;
+}
+
+.controls h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+    font-weight: 400;
+}
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.theme-btn {
+    background: var(--secondary-glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-btn.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .glass-container {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .theme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
