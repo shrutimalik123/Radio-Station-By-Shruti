@@ -101,18 +101,23 @@ h1 {
 
 .iframe-container {
     /* 
-       Move off-screen to hide from user but keep "visible" for browser
-       to allow audio playback.
+       Make it technically "visible" and large enough (200x200) 
+       so browsers/YouTube allow playback, but hide it behind the UI
+       or make it nearly transparent.
     */
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     width: 200px;
     height: 200px;
-    visibility: hidden;
+    opacity: 0.01;
+    /* Not 0, so it renders */
+    pointer-events: none;
+    z-index: 1;
+    /* Positive z-index to ensure it's "on top" for browser logic, but opacity makes it invisible */
 }
 
-/* Override visibility for the iframe itself if needed */
+/* Override visibility for the iframe itself */
 #radio-player {
     width: 200px;
     height: 200px;
