@@ -42,6 +42,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     console.log("Player Ready");
+    player = event.target; // Ensure we have the correct instance
     updateStatus("Player ready. Select a vibe.");
 }
 
@@ -81,13 +82,22 @@ function loadStream(themeKey) {
     updateActiveButton();
     updateStatus("Loading " + themeKey + "...");
 
-    if (player && player.loadVideoById) {
-        player.loadVideoById(themes[themeKey]);
-        player.unMute(); // Force unmute
-        player.setVolume(100); // Force max volume
+    if (player && typeof player.loadVideoById === 'function') {
+        try {
+            player.loadVideoById(themes[themeKey]);
+            player.unMute();
+            player.setVolume(100);
+        } catch (e) {
+            console.error(e);
+            updateStatus("Error calling player: " + e.message);
+        }
     } else {
-        console.warn("Player not ready yet");
-        updateStatus("Player not ready. Wait a moment.");
+        console.warn("Player object issue", player);
+        if (!player) {
+            updateStatus("Player not initialized. Refresh page.");
+        } else {
+            updateStatus("Player API missing. Refresh page.");
+        }
     }
 }
 
